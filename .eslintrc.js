@@ -34,15 +34,7 @@ module.exports = {
   rules: {
     'no-unused-vars': 'error',
     'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': [
-      'warn',
-      {
-        vars: 'all',
-        varsIgnorePattern: '^_',
-        args: 'after-used',
-        argsIgnorePattern: '^_',
-      },
-    ],
+    'unused-imports/no-unused-vars': 'warn',
     'react/no-unescaped-entities': 'off',
     '@next/next/no-img-element': 'warn',
     'react-hooks/exhaustive-deps': [
@@ -104,6 +96,12 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       rules: {
         '@typescript-eslint/no-unused-vars': ['warn'],
+      },
+    },
+    {
+      files: ['.eslintrc.js'],
+      parserOptions: {
+        project: null,
       },
     },
   ],
