@@ -68,7 +68,7 @@ export default function AnimatedBackground({
   return (
     <svg
       ref={svgRef}
-      className="fixed inset-0 w-full h-full"
+      className="fixed inset-0 -z-40 w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
     >
       {dots.map((dot, index) => (
@@ -116,6 +116,23 @@ export default function AnimatedBackground({
         initial="initial"
         animate="animate"
         opacity={opacity}
+      />
+
+      <motion.path
+        d={`${zPath} ${yPath} ${kPath}`}
+        stroke={color}
+        strokeWidth={6}
+        fill="none"
+        filter="url(#glow)"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{
+          duration: 6 / speed,
+          ease: 'linear',
+          repeat: Infinity,
+          repeatType: 'loop',
+        }}
+        opacity={opacity * 0.5}
       />
 
       <defs>
