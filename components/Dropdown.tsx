@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { useMenu } from '@/contexts/MenuContext';
 import { navs } from '@/data/headerNavLinks';
 
-import { Footer } from './footer';
+import { Footer } from './Footer';
 
 const DropdownMenu = () => {
   const { isOpen, toggleOpen } = useMenu();
