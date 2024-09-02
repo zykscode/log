@@ -15,7 +15,8 @@ export interface Post {
   id: string;
   title: string;
   summary: string;
-  tag: { title: string; color: string }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tag: any;
   createdAt: string;
   author: {
     name: string;
