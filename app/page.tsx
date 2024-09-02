@@ -5,6 +5,7 @@ import React from 'react';
 import PostCard from '@/components/PostCard';
 import Wrapper from '@/components/Wrapper';
 import { getAllPosts } from '@/lib/hyrgaph';
+import { Post } from '@/types/post'; // Adjust the import path as needed
 
 const Page = async () => {
   const posts = await getAllPosts();
@@ -13,7 +14,7 @@ const Page = async () => {
     <Wrapper>
       <h1>Posts</h1>
       <div className="posts-grid">
-        {posts.map((post) => (
+        {posts.map((post: Post) => (
           <PostCard
             tags={post.tag}
             date={post.createdAt}
