@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { readFile } from 'fs/promises';
-import path from 'path';
-import { getPlaiceholder } from 'plaiceholder';
 
 import Wrapper from '@/components/Wrapper';
 
-const getImage = async (src: string) => {
+{
+  /* const getImage = async (src: string) => {
   try {
     const filePath = path.join(process.cwd(), 'public', 'images', 'blog', src);
     const buffer = await readFile(filePath);
@@ -25,11 +23,13 @@ const getImage = async (src: string) => {
     };
   }
 };
-
-const Page = ({ children, ...props }: any) => {
+*/
+}
+const Page = ({ children }: any) => {
   return (
     <Wrapper>
-      <h1>posts</h1>;
+      <h1>posts</h1>
+      {children} {/* Use the children prop here */}
     </Wrapper>
   );
 };
