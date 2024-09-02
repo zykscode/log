@@ -1,8 +1,15 @@
 import { gql, GraphQLClient } from 'graphql-request';
 
-const hygraphClient = new GraphQLClient(process.env.NEXT_HYGRAPH_ENDPOINT, {
+const endpoint = process.env.NEXT_HYGRAPH_ENDPOINT;
+const token = process.env.HYGRAPH_MUTATION_TOKEN;
+
+if (!endpoint || !token) {
+  throw new Error('Missing required environment variables');
+}
+
+const hygraphClient = new GraphQLClient(endpoint, {
   headers: {
-    Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -22,7 +29,18 @@ export async function getCommentsByPostId(postId: string) {
       }
     }
   `;
-  const { comments } = await hygraphClient.request(query, { postId });
+  interface CommentsResponse {
+    comments: Array<{
+      id: string;
+      name: string;
+      email: string;
+      content: string;
+      createdAt: string;
+    }>;
+  }
+  const { comments } = await hygraphClient.request<CommentsResponse>(query, {
+    postId,
+  });
   return comments;
 }
 
@@ -54,7 +72,7 @@ export async function getAllPosts() {
     }
   `;
   try {
-    const { posts } = await hygraphClient.request(query);
+    const { posts } = await hygraphClient.request<{ posts: Post[] }>(query);
     return posts;
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -99,7 +117,7 @@ export async function getPostBySlug(slug: string) {
       }
     }
   `;
-  const { post } = await hygraphClient.request(query, { slug });
+  const { post } = await hygraphClient.request<PostResponse>(query, { slug });
   return post;
 }
 
@@ -122,7 +140,7 @@ export async function getAllAuthors() {
       }
     }
   `;
-  const { authors } = await hygraphClient.request(query);
+  const { authors } = await hygraphClient.request<{ authors: Author[] }>(query);
   return authors;
 }
 
@@ -145,7 +163,7 @@ export async function getAuthorById(id: string) {
       }
     }
   `;
-  const { author } = await hygraphClient.request(query, { id });
+  const { author } = await hygraphClient.request<AuthorResponse>(query, { id });
   return author;
 }
 
@@ -160,7 +178,10 @@ export async function getAllTags() {
       }
     }
   `;
-  const { tags } = await hygraphClient.request(query);
+  interface TagsResponse {
+    tags: Array<{ id: string; title: string; colors: string }>;
+  }
+  const { tags } = await hygraphClient.request<TagsResponse>(query);
   return tags;
 }
 
@@ -183,12 +204,25 @@ export async function getPostsByTag(tag: string) {
     }
   `;
 
-  const { posts } = await hygraphClient.request(query, { tag });
+  interface PostsByTagResponse {
+    posts: Array<{
+      title: string;
+      slug: string;
+      excerpt: string;
+      date: string;
+      coverImage: { url: string };
+      tags: Array<{ name: string; slug: string }>;
+    }>;
+  }
+
+  const { posts } = await hygraphClient.request<PostsByTagResponse>(query, {
+    tag,
+  });
   return posts;
 }
 
 // Add caching
-let cachedPosts = null;
+let cachedPosts: Post[] | null = null;
 let lastFetchTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
@@ -226,12 +260,58 @@ export async function getAdjacentPosts(currentDate: string) {
       }
     }
   `;
-  const { previousPost, nextPost } = await hygraphClient.request(query, {
-    currentDate,
-  });
+  const { previousPost, nextPost } =
+    await hygraphClient.request<AdjacentPostsResponse>(query, {
+      currentDate,
+    });
 
   return {
     previousPost: previousPost[0] || null,
     nextPost: nextPost[0] || null,
   };
+}
+
+interface Post {
+  id: string;
+  title: string;
+  createdAt: string;
+  tag: {
+    id: string;
+    title: string;
+    colors: string;
+  };
+  summary: string;
+  coverImage: {
+    url: string;
+  };
+  slug: string;
+  author: {
+    id: string;
+    name: string;
+  };
+}
+
+interface PostResponse {
+  post: Post; // Replace 'any' with a more specific type if available
+}
+
+interface Author {
+  id: string;
+  name: string;
+  avatar: { url: string };
+  occupation: string;
+  company: string;
+  email: string;
+  twitter: string;
+  linkedin: string;
+  github: string;
+}
+
+interface AuthorResponse {
+  author: Author;
+}
+
+interface AdjacentPostsResponse {
+  previousPost: { title: string; slug: string }[];
+  nextPost: { title: string; slug: string }[];
 }
