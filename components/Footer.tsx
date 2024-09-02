@@ -25,6 +25,7 @@ export const Footer = () => {
             title={`Twitter @${twitter}`}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Twitter @${twitter}`}
           >
             <FaTwitter />
           </a>
@@ -37,6 +38,7 @@ export const Footer = () => {
             title={`GitHub @${github}`}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`GitHub @${github}`}
           >
             <FaGithub />
           </a>
@@ -49,6 +51,7 @@ export const Footer = () => {
             title={`YouTube ${author}`}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`YouTube ${author}`}
           >
             <FaYoutube />
           </a>

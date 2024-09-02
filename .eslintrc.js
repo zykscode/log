@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['next.config.mjs'],
   root: true,
   parser: '@typescript-eslint/parser',
   env: {

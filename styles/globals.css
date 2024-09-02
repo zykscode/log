@@ -200,6 +200,35 @@
 /*
 ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com
 */
+.post-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.post-card__image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.post-card__title {
+  font-size: 1.5rem;
+  margin: 8px 0;
+}
+
+.post-card__excerpt {
+  font-size: 1rem;
+  color: #555;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
 .task-list-item:before {
   display: none;
 }
@@ -6244,7 +6273,7 @@ select {
   --tw-invert: ;
   --tw-saturate: ;
   --tw-sepia: ;
-  --tw-drop-shadow:                                                                                                
+  --tw-drop-shadow:                                                                                                  
 ;
 }
 
