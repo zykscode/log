@@ -5,8 +5,7 @@ import React from 'react';
 import PostCard from '@/components/PostCard';
 import Wrapper from '@/components/Wrapper';
 import { getAllPosts } from '@/lib/hyrgaph';
-import { Post } from '@/types/post'; // Adjust the import path as needed
-
+import { Post } from '@/types';
 const Page = async () => {
   const posts = await getAllPosts();
 
