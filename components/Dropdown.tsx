@@ -10,7 +10,7 @@ import { navs } from '@/data/headerNavLinks';
 import { Footer } from './Footer';
 
 const DropdownMenu = () => {
-  const { isOpen, toggleOpen } = useMenu();
+  const { isOpen } = useMenu();
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
@@ -98,9 +98,9 @@ const DropdownMenu = () => {
     },
   };
 
-  const toRoman = (num) => {
+  const toRoman = (num: number): string => {
     const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    return roman[num - 1] || num;
+    return roman[num - 1] || num.toString();
   };
 
   return (
