@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import PageLogo from './Page-logo';
+import PageLogo from './PageLogo';
 
 const Breadcrumbs = () => {
   return (

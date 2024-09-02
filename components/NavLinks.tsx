@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const variants = {
-  open: (i) => ({
+  open: (i: number) => ({
     x: '100%',
     opacity: 0,
     transition: {
@@ -20,7 +20,12 @@ const variants = {
   },
 };
 
-const NavLink = ({ text, i }) => {
+interface NavLinkProps {
+  text: string;
+  i: number;
+}
+
+const NavLink = ({ text, i }: NavLinkProps) => {
   return (
     <motion.div
       custom={i}
