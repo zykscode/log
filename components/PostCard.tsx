@@ -1,9 +1,9 @@
 'use client';
 
 import { format } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import styles from './PostCard.module.css';
 
@@ -24,13 +24,15 @@ const PostCard: React.FC<PostCardProps> = ({
   author,
   tags,
 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+
   return (
     <motion.div
+      ref={ref}
       className={styles['post-card']}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
     >
       <div className={styles['post-card__image-container']}>

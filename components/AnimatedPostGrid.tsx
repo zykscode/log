@@ -1,42 +1,18 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import { Post } from '@/types';
 
 import PostCard from './PostCard';
+import styles from './PostCard.module.css';
 
 interface AnimatedPostGridProps {
   posts: Post[];
 }
 
 const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (scrollRef.current) {
-        e.preventDefault();
-        scrollRef.current.scrollTo({
-          top: scrollRef.current.scrollTop + e.deltaY,
-          behavior: 'smooth',
-        });
-      }
-    };
-
-    const currentRef = scrollRef.current;
-    if (currentRef) {
-      currentRef.addEventListener('wheel', handleWheel, { passive: false });
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener('wheel', handleWheel);
-      }
-    };
-  }, []);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -49,8 +25,7 @@ const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
 
   return (
     <motion.div
-      ref={scrollRef}
-      className="flex flex-col overflow-y-auto custom-scrollbar"
+      className={styles['posts-grid']}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
