@@ -29,9 +29,9 @@ const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
   return (
     <div className={styles['posts-container']} ref={containerRef}>
       <motion.div className={styles['posts-grid']} style={{ y }}>
-        {posts.map((post: Post) => (
+        {[...posts, ...posts, ...posts].map((post: Post, index: number) => (
           <PostCard
-            key={post.id}
+            key={`${post.id}-${index}`}
             tags={post.tag}
             date={post.createdAt}
             author={post.author.name}
