@@ -104,7 +104,7 @@ export default function RootLayout({
       />
 
       <body className={`min-h-screen`}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <MenuProvider>{children}</MenuProvider>
         </ThemeProvider>
       </body>

@@ -68,7 +68,7 @@ export default function AnimatedBackground({
   return (
     <svg
       ref={svgRef}
-      className=" md:pt-20 px-4 pt-18  -z-40 w-full h-full"
+      className=" md:my-20 px-4 pt-18 -z-40 w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
     >
       {dots.map((dot, index) => (
