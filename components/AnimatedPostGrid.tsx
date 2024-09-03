@@ -50,7 +50,7 @@ const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
   return (
     <motion.div
       ref={scrollRef}
-      className="flex flex-col overflow-y-auto max-h-[calc(100vh-200px)] lg:max-h-[80vh] custom-scrollbar"
+      className="flex flex-col overflow-y-auto custom-scrollbar"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
