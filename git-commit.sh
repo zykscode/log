@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Check if a commit message was provided
-if [ -z "$1" "$2" ]; then
-  echo "Error: No commit message provided."
-  echo "Usage: ./git-commit.sh \"your commit message\""
+# Check if both commit type and message were provided
+if [ $# -lt 2 ]; then
+  echo "Error: Insufficient arguments provided."
+  echo "Usage: ./git-commit.sh <commit-type> <commit-message>"
   exit 1
 fi
 
 # Add all changes to the staging area
 git add .
 
-# Commit with the provided message
+# Commit with the provided type and message
 git commit -m "$1: $2"
 
-# Push the commit to the main branch
-git push origin main
+# Push the commit to the current branch
+git push origin $(git rev-parse --abbrev-ref HEAD)
