@@ -4,8 +4,12 @@
 
 @layer base {
   :root {
-   ,
-    --background: 33 12% 81%;
+    --custom-black: 0 0% 8.2%;
+    ----background: 13 18% 81.2%;
+    --black-deep: 45 28.6% 2.7%;
+    --custom-red: 11 93% 42.9%;
+    --custom-brown: 25 100% 28.2%;
+    --dim-grey: 94 3.8% 35.5%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
@@ -92,7 +96,7 @@
   }
 
   .dark {
-    --background: 213, 12%, 19%%;
+    --background: 285 7.1% 25.5%;
     --foreground: 60 9.1% 97.8%;
     --card: 20 14.3% 4.1%;
     --card-foreground: 60 9.1% 97.8%;
@@ -6274,7 +6278,7 @@ select {
   --tw-invert: ;
   --tw-saturate: ;
   --tw-sepia: ;
-  --tw-drop-shadow:                                                                                                  
+  --tw-drop-shadow:                                                                                                        
 ;
 }
 
