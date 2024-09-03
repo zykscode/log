@@ -67,7 +67,7 @@ const PostCard: React.FC<PostCardProps> = ({
               className={`${styles.skeleton} ${styles['skeleton__title']}`}
             />
             <div
-              className={`${styles.skeleton} ${styles['skeleton__excerpt']}`}
+              className={`${styles.skeleton} bg-custom-black ${styles['skeleton__excerpt']}`}
             />
             <div className={`${styles.skeleton} ${styles['skeleton__meta']}`} />
             <div className={`${styles.skeleton} ${styles['skeleton__tags']}`} />

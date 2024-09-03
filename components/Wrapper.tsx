@@ -9,7 +9,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     <section className="flex px-4 min-h-screen flex-col">
       <Header />
       <div className="overflow-hidden flex flex-col relative bg-[#d0cbc5] z-20 flex-grow rounded-xl bg-repeat  bg-contain">
-        <div className=" fixed mt-18 md:mt-20 px-4 z-[-1]">
+        <div className="fixed inset-0 z-[-1]">
           <AnimatedBackground speed={1.5} opacity={0.4} />
         </div>
         <DropdownMenu />

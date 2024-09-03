@@ -18,6 +18,13 @@ const config: Config = {
     },
     extend: {
       colors: {
+        'custom-black': '#151515',
+        'light-grey': '#d5d0ca',
+        'black-deep': '#090805',
+        'custom-red': '#d32d08',
+        'custom-brown': '#903900',
+        'dim-grey': '#5a5e57',
+        'dim-grey-2': '#443c46',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
