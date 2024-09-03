@@ -21,12 +21,14 @@ const Main = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <motion.main
-      className="flex-grow px-1 flex flex-col"
+      className="flex-grow px-1 flex flex-col overflow-hidden"
       initial="closed"
       animate={isOpen ? 'open' : 'closed'}
       variants={variants}
     >
-      {children}
+      <div className="flex flex-col lg:flex-row h-full overflow-hidden">
+        {children}
+      </div>
     </motion.main>
   );
 };

@@ -4,6 +4,8 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Remove the hover effect from CSS as it's now handled by Framer Motion */

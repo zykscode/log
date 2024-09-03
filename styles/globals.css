@@ -6278,7 +6278,7 @@ select {
   --tw-invert: ;
   --tw-saturate: ;
   --tw-sepia: ;
-  --tw-drop-shadow:                                                                                                        
+  --tw-drop-shadow:                                                                                                         
 ;
 }
 
@@ -8075,6 +8075,20 @@ a.breadcrumb:hover {
     line-height: 2vw;
   }
 
+  .custom-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; /* Safari and Chrome */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
   .text.var.small.white,
   .text.var.quote {
     font-size: 2vw;
