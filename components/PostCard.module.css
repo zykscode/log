@@ -1,8 +1,9 @@
 .post-card {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .post-card__image-container {
@@ -12,8 +13,14 @@
 
 .post-card__content {
   flex-grow: 1;
-  overflow-y: auto;
   padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.post-card__content::-webkit-scrollbar {
+  display: none; /* WebKit */
 }
 
 /* Remove the hover effect from CSS as it's now handled by Framer Motion */
@@ -78,9 +85,21 @@
   }
 }
 
+.posts-container {
+  height: 80vh;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.posts-container::-webkit-scrollbar {
+  display: none;
+}
+
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: 20px;
   padding: 20px;
   max-height: 80vh;
@@ -154,4 +173,22 @@
 
 .skeleton__tags {
   width: 50%;
+}
+
+@media (min-width: 768px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .posts-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
 
 import { Post } from '@/types';
 
@@ -13,35 +13,35 @@ interface AnimatedPostGridProps {
 }
 
 const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
+
+  // Ensure the transform updates when scrollYProgress changes
+  useEffect(() => {
+    y.set(`${scrollYProgress.get()}%`); // Convert number to string with percentage
+  }, [scrollYProgress, y]);
 
   return (
-    <motion.div
-      className={styles['posts-grid']}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {posts.map((post: Post) => (
-        <PostCard
-          key={post.id}
-          tags={post.tag}
-          date={post.createdAt}
-          author={post.author.name}
-          title={post.title}
-          excerpt={post.summary}
-          coverImage={post.coverImage.url}
-        />
-      ))}
-    </motion.div>
+    <div className={styles['posts-container']} ref={containerRef}>
+      <motion.div className={styles['posts-grid']} style={{ y }}>
+        {posts.map((post: Post) => (
+          <PostCard
+            key={post.id}
+            tags={post.tag}
+            date={post.createdAt}
+            author={post.author.name}
+            title={post.title}
+            excerpt={post.summary}
+            coverImage={post.coverImage.url}
+          />
+        ))}
+      </motion.div>
+    </div>
   );
 };
 

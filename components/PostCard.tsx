@@ -39,8 +39,8 @@ const PostCard: React.FC<PostCardProps> = ({
         <Image
           src={coverImage}
           alt={title}
-          layout="fill"
-          objectFit="cover"
+          width={'100'}
+          height={100}
           className={styles['post-card__image']}
         />
       </div>
