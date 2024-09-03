@@ -16,14 +16,18 @@ const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'],
+    offset: ['start start', 'end start'],
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
 
   return (
-    <div className={styles['posts-container']} ref={containerRef}>
-      <motion.div className={styles['posts-grid']} style={{ y }}>
+    <div className={styles['posts-container']}>
+      <motion.div
+        className={styles['posts-grid']}
+        style={{ y }}
+        ref={containerRef}
+      >
         {[...posts, ...posts, ...posts].map((post: Post, index: number) => (
           <PostCard
             key={`${post.id}-${index}`}
