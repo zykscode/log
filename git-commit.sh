@@ -11,7 +11,7 @@ fi
 git add .
 
 # Commit with the provided message
-git commit -m "$2: $1"
+git commit -m "$1: $2"
 
 # Push the commit to the main branch
 git push origin main
