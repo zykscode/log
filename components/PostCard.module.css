@@ -86,8 +86,8 @@
 }
 
 .posts-container {
-  height: 80vh;
-  overflow-y: scroll;
+  height: 100vh;
+  overflow-y: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -102,9 +102,6 @@
   grid-template-columns: 1fr;
   gap: 20px;
   padding: 20px;
-  max-height: 80vh;
-  overflow-y: auto;
-  scroll-behavior: smooth;
 }
 
 .posts-grid::-webkit-scrollbar {

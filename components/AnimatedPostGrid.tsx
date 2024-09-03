@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { Post } from '@/types';
 
@@ -20,11 +20,6 @@ const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
-
-  // Ensure the transform updates when scrollYProgress changes
-  useEffect(() => {
-    y.set(`${scrollYProgress.get()}%`); // Convert number to string with percentage
-  }, [scrollYProgress, y]);
 
   return (
     <div className={styles['posts-container']} ref={containerRef}>
