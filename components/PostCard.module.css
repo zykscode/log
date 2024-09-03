@@ -4,8 +4,6 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Remove the hover effect from CSS as it's now handled by Framer Motion */
@@ -82,8 +80,8 @@
 }
 
 .posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   padding: 20px;
   overflow-y: auto;
