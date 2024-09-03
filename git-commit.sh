@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if a commit message was provided
-if [ -z "$1" ]; then
+if [ -z "$1" "$2" ]; then
   echo "Error: No commit message provided."
   echo "Usage: ./git-commit.sh \"your commit message\""
   exit 1
@@ -11,7 +11,7 @@ fi
 git add .
 
 # Commit with the provided message
-git commit -m "feat: $1"
+git commit -m "$2: $1"
 
 # Push the commit to the main branch
 git push origin main
