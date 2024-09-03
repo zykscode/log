@@ -205,6 +205,22 @@
 /*
 ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com
 */
+
+@keyframes glow {
+  0%, 100% {
+    stroke: hsl(20 14.3% 4.1%);
+    filter: drop-shadow(0 0 2px hsl(20 14.3% 4.1%));
+  }
+  50% {
+    stroke: hsl(60 9.1% 97.8%);
+    filter: drop-shadow(0 0 10px hsl(60 9.1% 97.8%));
+  }
+}
+
+.animate-glow {
+  animation: glow 5s ease-in-out infinite;
+}
+
 .post-card {
   border: 1px solid #ddd;
   padding: 16px;

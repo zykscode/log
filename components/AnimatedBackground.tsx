@@ -68,16 +68,38 @@ export default function AnimatedBackground({
   return (
     <svg
       ref={svgRef}
-      className=" md:my-20 px-4 pt-18 -z-40 w-full h-full"
+      className="md:my-20 px-4 pt-18 -z-40 w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <defs>
+        <linearGradient
+          id="glowingGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop offset="0%" stopColor="hsl(20 14.3% 4.1%)" />
+          <stop offset="50%" stopColor="hsl(60 9.1% 97.8%)" />
+          <stop offset="100%" stopColor="hsl(20 14.3% 4.1%)" />
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
       {dots.map((dot, index) => (
         <circle
           key={index}
           cx={dot.x}
           cy={dot.y}
           r={1}
-          fill="#000"
+          fill="url(#glowingGradient)"
+          className="animate-glow"
           opacity={0.3}
         />
       ))}
