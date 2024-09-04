@@ -1,78 +1,80 @@
-.post-card {
+.posts-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.posts-description {
+  width: 30%;
+  padding: 2rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.posts-grid {
+  width: 70%;
   display: flex;
   flex-direction: column;
-  height: auto;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.post-card {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .post-card__image-container {
-  position: relative;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
-}
-
-.post-card__content {
-  flex-grow: 1;
-  padding: 15px;
-  overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.post-card__content::-webkit-scrollbar {
-  display: none; /* WebKit */
-}
-
-/* Remove the hover effect from CSS as it's now handled by Framer Motion */
-.post-card:hover {
-  transform: none;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 30%;
 }
 
 .post-card__image {
-  transition: transform 0.3s ease-in-out;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card__content {
+  width: 70%;
+  padding: 1.5rem;
 }
 
 .post-card__title {
   font-size: 1.5rem;
-  margin: 0 0 10px;
-  color: #333;
-  font-weight: 600;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .post-card__excerpt {
   font-size: 1rem;
   color: #666;
-  margin: 0 0 16px;
-  line-height: 1.5;
+  margin-bottom: 1rem;
 }
 
 .post-card__meta {
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
-  color: #999;
-}
-
-.post-card__date,
-.post-card__author {
-  margin: 0;
+  color: #888;
+  margin-bottom: 1rem;
 }
 
 .post-card__tags {
   display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
+  gap: 0.5rem;
 }
 
 .post-card__tag {
-  background-color: #f0f0f0;
-  color: #666;
-  padding: 4px 8px;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  margin-right: 6px;
-  margin-bottom: 6px;
+  color: #ffffff;
 }
 
 @keyframes bounce {
@@ -86,25 +88,23 @@
 }
 
 .posts-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
   height: 100vh;
   overflow-y: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.posts-container::-webkit-scrollbar {
-  display: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 .posts-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  padding: 20px;
+  gap: 2rem;
+  padding: 2rem;
 }
 
-.posts-grid::-webkit-scrollbar {
+/*.posts-grid::-webkit-scrollbar {
   width: 8px;
 }
 
@@ -120,7 +120,7 @@
 .posts-grid::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
+*/
 .posts-grid:hover .post-card {
   animation: none;
 }
@@ -173,19 +173,23 @@
 }
 
 @media (min-width: 768px) {
-  .posts-grid {
+  .posts-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .posts-grid {
+  .posts-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
+.post-item {
+  width: 100%;
+}
+
 @media (min-width: 1280px) {
   .posts-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }

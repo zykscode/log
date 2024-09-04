@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import React, { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import React from 'react';
 
 import { Post } from '@/types';
 
@@ -13,34 +13,52 @@ interface AnimatedPostGridProps {
 }
 
 const AnimatedPostGrid: React.FC<AnimatedPostGridProps> = ({ posts }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
+  const { scrollYProgress } = useScroll();
+
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
-
   return (
-    <div className={styles['posts-container']}>
+    <>
       <motion.div
-        className={styles['posts-grid']}
-        style={{ y }}
-        ref={containerRef}
-      >
-        {[...posts, ...posts, ...posts].map((post: Post, index: number) => (
-          <PostCard
-            key={`${post.id}-${index}`}
-            tags={post.tag}
-            date={post.createdAt}
-            author={post.author.name}
-            title={post.title}
-            excerpt={post.summary}
-            coverImage={post.coverImage.url}
-          />
-        ))}
-      </motion.div>
-    </div>
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '4px',
+          background: 'var(--primary-color)',
+          transformOrigin: '0%',
+          scaleX,
+        }}
+      />
+      <div className={styles['posts-container']}>
+        {[...posts, ...posts, ...posts, ...posts].map(
+          (post: Post, index: number) => (
+            <motion.div
+              key={`${post.id}-${index}`}
+              className={styles['post-item']}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: '-100px' }}
+            >
+              <PostCard
+                tags={post.tag}
+                date={post.createdAt}
+                author={post.author.name}
+                title={post.title}
+                excerpt={post.summary}
+                coverImage={post.coverImage.url}
+              />
+            </motion.div>
+          ),
+        )}
+      </div>
+    </>
   );
 };
 
