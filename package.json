@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "vercel-build": "payload migrate && next build",
+    "vercel-build": "if [ \"$VERCEL_ENV\" = \"production\" ]; then payload migrate; fi && next build",
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
@@ -90,7 +90,7 @@
   },
   "packageManager": "pnpm@12.18.0",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "24.x"
   },
   "type": "module"
 }

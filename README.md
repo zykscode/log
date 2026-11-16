@@ -56,7 +56,8 @@ lists, feeds, search, sitemap) or *Private* (only you). **Author mode** (admin s
    (10 GB free, no egress) via the `S3_*` variables.
 3. **Hosting — Vercel Hobby**: import the repo, set the variables from `.env.example`
    (`PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, database, storage). Vercel runs the
-   `vercel-build` script, which applies database migrations and then builds.
+   `vercel-build` script: production builds apply database migrations first; preview
+   builds skip them so an unmerged branch can never change the live schema.
 4. Open `https://your-domain/admin` and create your account.
 
 Optional: comments via [Giscus](https://giscus.app) (free, GitHub Discussions) — paste
