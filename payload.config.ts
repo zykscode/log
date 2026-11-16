@@ -23,6 +23,17 @@ import { revalidateAfterChange, revalidateAfterDelete } from './payload/hooks';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Turso: our own names, or the ones Vercel's Turso integration sets automatically.
+const databaseUrl = process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL;
+const databaseAuthToken =
+  process.env.DATABASE_AUTH_TOKEN || process.env.TURSO_AUTH_TOKEN;
+if (!databaseUrl && process.env.VERCEL) {
+  throw new Error(
+    'No database configured. Set DATABASE_URL + DATABASE_AUTH_TOKEN (or connect Turso in Vercel → Storage). ' +
+      'The local SQLite file cannot be used on Vercel.',
+  );
+}
+
 /** Uploads: local disk by default; Vercel Blob or any S3-compatible bucket (R2, B2, AWS) when configured. */
 function storagePlugins(): Plugin[] {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
@@ -111,10 +122,8 @@ export default buildConfig({
   globals: [Settings],
   db: sqliteAdapter({
     client: {
-      url:
-        process.env.DATABASE_URL ||
-        `file:${path.resolve(dirname, 'data/zykson.db')}`,
-      authToken: process.env.DATABASE_AUTH_TOKEN,
+      url: databaseUrl || `file:${path.resolve(dirname, 'data/zykson.db')}`,
+      authToken: databaseAuthToken,
     },
     migrationDir: path.resolve(dirname, 'migrations'),
   }),
