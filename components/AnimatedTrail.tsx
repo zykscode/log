@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface AnimatedTrailProps {
@@ -48,7 +48,7 @@ const AnimatedTrail: React.FC<AnimatedTrailProps> = ({
     }
   }, [words]);
 
-  const pathVariants = {
+  const pathVariants: Variants = {
     initial: { pathLength: 0, pathOffset: 0 },
     animate: {
       pathLength: 0.2,

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'motion/react';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
@@ -16,7 +16,7 @@ const DropdownMenu = () => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     open: {
       height: 'calc(100vh - 72px)',
       y: '0',
@@ -39,7 +39,7 @@ const DropdownMenu = () => {
     },
   };
 
-  const dropdownVariants = {
+  const dropdownVariants: Variants = {
     open: {
       opacity: 1,
       transition: {
@@ -61,7 +61,7 @@ const DropdownMenu = () => {
     },
   };
 
-  const navItemVariants = {
+  const navItemVariants: Variants = {
     open: {
       y: 0,
       opacity: 1,
@@ -81,7 +81,7 @@ const DropdownMenu = () => {
     },
   };
 
-  const underlineVariants = {
+  const underlineVariants: Variants = {
     open: {
       width: '100%',
       transition: {
@@ -105,14 +105,14 @@ const DropdownMenu = () => {
 
   return (
     <motion.div
-      className="bg-[#121011] text-slate-100 text-4xl md:text-7xl capitalize flex-grow overflow-hidden"
+      className="bg-[#121011] text-slate-100 text-4xl md:text-7xl capitalize grow overflow-hidden"
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
       variants={containerVariants}
     >
       <motion.div
         variants={dropdownVariants}
-        className="flex flex-col h-full px-[3rem] md:flex-row justify-between"
+        className="flex flex-col h-full px-12 md:flex-row justify-between"
       >
         <motion.div className="flex flex-col justify-evenly w-full h-full">
           {navs.map((nav, i) => (

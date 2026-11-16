@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import React from 'react';
 
 import { useMenu } from '@/contexts/MenuContext';
@@ -14,7 +14,7 @@ const Header = () => {
     <motion.header
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className="header items-center h-18 md:h-20"
+      className="header items-center md:h-20"
     >
       <Breadcrumbs />
 

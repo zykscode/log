@@ -1,4 +1,4 @@
-import { motion, SVGMotionProps } from 'framer-motion';
+import { motion, SVGMotionProps } from 'motion/react';
 import React from 'react';
 
 const Path = (
@@ -11,7 +11,7 @@ const Path = (
     strokeWidth="1.175"
     stroke="hsl(var(--foreground))"
     strokeLinecap="round"
-    transition={{ duration: '0.6' }}
+    transition={{ duration: 0.6 }}
     {...props}
   />
 );
@@ -24,7 +24,7 @@ const scrollToTopAndToggle = (toggle: () => void) => {
 export const MenuToggle = ({ toggle }: { toggle: () => void }) => (
   <button
     onClick={() => scrollToTopAndToggle(toggle)}
-    className="w-16 md:w-20 flex justify-center items-center bg-transparent rounded-full focus:outline-none"
+    className="w-16 md:w-20 flex justify-center items-center bg-transparent rounded-full focus:outline-hidden"
   >
     <svg className="w-full" viewBox="0 0 48 48">
       <Path

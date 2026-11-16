@@ -9,7 +9,7 @@ const Page = async () => {
     <Wrapper>
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-1/3  lg:pr-8 mb-8 flex flex-col lg:mb-0">
-          <h1 className="relative pt-4 md:pt-8 block z-[999] uppercase text-9xl mb-4">
+          <h1 className="relative pt-4 md:pt-8 block z-999 uppercase text-9xl mb-4">
             Posts
           </h1>
           <p className="text-lg max-w-sm hidden md:block">

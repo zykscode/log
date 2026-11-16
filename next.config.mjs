@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is va.vercel-scripts.com helped-drake-74.clerk.accounts.dev localhost:3000 blob:;
@@ -41,18 +40,23 @@ const securityHeaders = [
   },
 ];
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  eslint: {
-    dirs: ['app', 'components', 'layouts', 'scripts'],
-  },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: '*.graphassets.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'media.graphassets.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'eu-central-1.graphassets.com',
       },
       {
         protocol: 'https',
@@ -67,59 +71,6 @@ const nextConfig = {
         headers: securityHeaders,
       },
     ];
-  },
-  webpack: (config) => {
-    config.module.rules.push(
-      {
-        test: /\.mdx?$/,
-        use: [
-          {
-            loader: '@mdx-js/loader',
-            options: {},
-          },
-        ],
-      },
-      {
-        test: /\.(md|mdx)$/,
-        use: [
-          {
-            loader: 'raw-loader',
-            options: {
-              esModule: false,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.svg$/,
-        use: ['@svgr/webpack'],
-      },
-    );
-
-    // Modify CSS loader options for CSS Modules
-    config.module.rules.forEach((rule) => {
-      if (rule.oneOf) {
-        rule.oneOf.forEach((oneOfRule) => {
-          if (
-            oneOfRule.test &&
-            oneOfRule.test.toString().includes('css') &&
-            oneOfRule.use &&
-            oneOfRule.use.loader &&
-            oneOfRule.use.loader.includes('css-loader') &&
-            !oneOfRule.use.loader.includes('postcss-loader')
-          ) {
-            if (oneOfRule.use.options) {
-              oneOfRule.use.options.modules = {
-                ...oneOfRule.use.options.modules,
-                mode: 'global',
-              };
-            }
-          }
-        });
-      }
-    });
-
-    return config;
   },
 };
 

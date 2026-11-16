@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import { useMenu } from '@/contexts/MenuContext';
 
@@ -21,7 +21,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <motion.main
-      className="flex-grow px-1 flex flex-col overflow-hidden"
+      className="grow px-1 flex flex-col overflow-hidden"
       initial="closed"
       animate={isOpen ? 'open' : 'closed'}
       variants={variants}

@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 import Image from 'next/image';
 import React, { useRef } from 'react';
 

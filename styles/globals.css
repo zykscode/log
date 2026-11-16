@@ -1,6 +1,123 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+@theme {
+  /* Pin the Tailwind v3 (sRGB hex) values of default palette colors in use. */
+  --color-slate-100: #f1f5f9;
+  --color-green-200: #bbf7d0;
+
+  /*
+    Tailwind v3 font-size line-heights were absolute (rem), so children inherited
+    the same pixel value; v4 uses unitless ratios. Pin the v3 values.
+  */
+  --text-xs--line-height: 1rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
+  --color-custom-black: #151515;
+  --color-light-grey: #d5d0ca;
+  --color-black-deep: #090805;
+  --color-custom-red: #d32d08;
+  --color-custom-brown: #903900;
+  --color-dim-grey: #5a5e57;
+  --color-dim-grey-2: #443c46;
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-custom-light-grey: #your-color-code-here;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility menu-title {
+  @apply text-[#d5d0ca] pt-4 pb-8 pr-[1vw] text-[11vh] leading-[11vh];
+  @media (max-width: 991px) {
+    @apply text-[10vw] leading-[8vw];
+  }
+  @media (max-width: 479px) {
+    @apply pb-8 text-[13vw] leading-[9vw];
+  }
+}
+
+@utility text-custom-light-grey {
+  color: #your-color-code-here;
+}
+
+@utility menu-index {
+  @apply text-custom-light-grey text-base leading-none inline-block relative bottom-[3.3rem] left-[.2rem];
+  @media (max-width: 991px) {
+    @apply bottom-[5.4vw] left-[1.9vw];
+  }
+  @media (max-width: 479px) {
+    @apply bottom-[9.1vw] left-[2.5vw];
+  }
+}
+/*
+! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com
+*/
 
 @layer base {
   :root {
@@ -171,41 +288,14 @@
   }
 }
 
-@layer utilities {
-  .menu-title {
-    @apply text-[#d5d0ca] pt-4 pb-8 pr-[1vw] text-[11vh] leading-[11vh];
-  }
-  .text-custom-light-grey {
-    color: #your-color-code-here;
-  }
-  @media (max-width: 991px) {
-    .menu-title {
-      @apply text-[10vw] leading-[8vw];
-    }
-  }
-  @media (max-width: 479px) {
-    .menu-title {
-      @apply pb-8 text-[13vw] leading-[9vw];
-    }
-  }
-  .menu-index {
-    @apply text-custom-light-grey text-base leading-none inline-block relative bottom-[3.3rem] left-[.2rem];
-  }
-  @media (max-width: 991px) {
-    .menu-index {
-      @apply bottom-[5.4vw] left-[1.9vw];
-    }
-  }
-  @media (max-width: 479px) {
-    .menu-index {
-      @apply bottom-[9.1vw] left-[2.5vw];
-    }
-  }
-}
 /*
-! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com
+  Legacy global styles (includes a compiled Tailwind v3.2.4 snapshot).
+  In Tailwind v3 these rules were unlayered and came right after the generated
+  utilities, so they won over utilities by specificity / source order. Tailwind
+  v4 puts utilities in a native cascade layer (unlayered CSS would always win),
+  so they are appended to the `utilities` layer to keep the original cascade.
 */
-
+@layer utilities {
 @keyframes glow {
   0%,
   100% {
@@ -7109,10 +7199,6 @@ a.breadcrumb:hover {
   height: 1.125rem;
 }
 
-.h-8 {
-  height: 2rem;
-}
-
 .max-h-\[428px\] {
   max-height: 428px;
 }
@@ -7145,14 +7231,6 @@ a.breadcrumb:hover {
   width: 18rem;
 }
 
-.w-8 {
-  width: 2rem;
-}
-
-.w-4 {
-  width: 1rem;
-}
-
 .flex-none {
   flex: none;
 }
@@ -7183,9 +7261,12 @@ a.breadcrumb:hover {
   cursor: default;
 }
 
-.flex-col {
-  flex-direction: column;
-}
+/*
+  `.flex-col`, `.h-8`, `.w-8` and `.w-4` removed from the snapshot: Tailwind
+  generates identical utilities, and in v3 the responsive variants that override
+  them (`md:flex-row`, `lg:flex-row`, `md:h-12`, `md:w-12`, `md:w-6`), emitted at
+  the very end of the v3 stylesheet, won. Keeping them here would flip that.
+*/
 
 .flex-wrap {
   flex-wrap: wrap;
@@ -11033,3 +11114,4 @@ a.breadcrumb:hover {
   background-color: #090805;
   height: 95vh;
 }
+} /* end @layer utilities (legacy) */

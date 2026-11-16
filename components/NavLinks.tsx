@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import React from 'react';
 
@@ -35,7 +35,7 @@ const NavLink = ({ text, i }: NavLinkProps) => {
     >
       <Link href={`/${text.toLowerCase()}`} className="relative">
         <span className="relative z-10 nav-link">{text}</span>
-        <span className="absolute w-full h-px bg-[#151515] left-0 scale-x-0 origin-right transition-transform duration-350 ease-out group-hover:scale-x-100 group-hover:origin-left lg:top-3"></span>
+        <span className="absolute w-full h-px bg-custom-black left-0 scale-x-0 origin-right transition-transform ease-out group-hover:scale-x-100 group-hover:origin-left lg:top-3"></span>
       </Link>
     </motion.div>
   );

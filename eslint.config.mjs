@@ -1,0 +1,125 @@
+import js from '@eslint/js';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
+
+export default defineConfig([
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'node_modules/**',
+    'next-env.d.ts',
+    'next.config.mjs',
+    'public/**',
+  ]),
+
+  js.configs.recommended,
+  ...nextVitals,
+  ...nextTs,
+  // eslint-config-next already registers the jsx-a11y plugin; only add its rules.
+  { rules: jsxA11y.flatConfigs.recommended.rules },
+  prettierRecommended,
+
+  {
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.amd,
+        ...globals.es2015,
+      },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    plugins: {
+      'unused-imports': unusedImports,
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'no-unused-vars': 'error',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': 'warn',
+      'react/no-unescaped-entities': 'off',
+      '@next/next/no-img-element': 'warn',
+      'react-hooks/exhaustive-deps': [
+        'warn',
+        {
+          additionalHooks: '(useLenis|useTransform)',
+        },
+      ],
+      'jsx-a11y/control-has-associated-label': [
+        'warn',
+        {
+          labelAttributes: ['label'],
+          controlComponents: ['Link', 'Button'],
+          ignoreElements: [
+            'audio',
+            'canvas',
+            'embed',
+            'input',
+            'textarea',
+            'tr',
+            'video',
+          ],
+          ignoreRoles: [
+            'grid',
+            'listbox',
+            'menu',
+            'menubar',
+            'radiogroup',
+            'row',
+            'tablist',
+            'toolbar',
+            'tree',
+            'treegrid',
+          ],
+          depth: 3,
+        },
+      ],
+      'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off',
+      'jsx-a11y/anchor-is-valid': [
+        'error',
+        {
+          components: ['Link'],
+          specialLink: ['hrefLeft', 'hrefRight'],
+          aspects: ['invalidHref', 'preferButton'],
+        },
+      ],
+      'react/prop-types': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  },
+
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      // TypeScript already reports undefined identifiers.
+      'no-undef': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn'],
+    },
+  },
+
+  {
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
+    languageOptions: {
+      parserOptions: { projectService: false, project: null },
+    },
+  },
+]);

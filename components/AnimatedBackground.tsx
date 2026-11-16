@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface AnimatedBackgroundProps {
@@ -52,7 +52,7 @@ export default function AnimatedBackground({
   const yPath = `M${startX + letterWidth + gap},${centerY - letterHeight / 2} L${startX + letterWidth + gap + letterWidth / 2},${centerY} L${startX + letterWidth + gap + letterWidth / 2},${centerY + letterHeight / 2} M${startX + letterWidth + gap + letterWidth},${centerY - letterHeight / 2} L${startX + letterWidth + gap + letterWidth / 2},${centerY}`;
   const kPath = `M${startX + letterWidth * 2 + gap * 2},${centerY - letterHeight / 2} L${startX + letterWidth * 2 + gap * 2},${centerY + letterHeight / 2} M${startX + letterWidth * 2 + gap * 2},${centerY} L${startX + letterWidth * 3 + gap * 2},${centerY - letterHeight / 2} M${startX + letterWidth * 2 + gap * 2},${centerY} L${startX + letterWidth * 3 + gap * 2},${centerY + letterHeight / 2}`;
 
-  const pathVariants = {
+  const pathVariants: Variants = {
     initial: { pathLength: 0, pathOffset: 0 },
     animate: {
       pathLength: [0.05, 0.05],
@@ -68,7 +68,7 @@ export default function AnimatedBackground({
   return (
     <svg
       ref={svgRef}
-      className=" md:my-20 px-4 pt-18 -z-40 w-full h-full"
+      className=" md:my-20 px-4 -z-40 w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
     >
       {dots.map((dot, index) => (

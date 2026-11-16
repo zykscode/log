@@ -9,7 +9,7 @@ export default function NotFound() {
   const { twitter, github, youtube } = siteConfig.links;
 
   return (
-    <div className="w-full bg-[#903900] h-full overflow-hidden -mt-10">
+    <div className="w-full bg-custom-brown h-full overflow-hidden -mt-10">
       <AnimatedBackground speed={1.5} opacity={0.4} />
 
       <div className="content _404">
@@ -127,7 +127,7 @@ export default function NotFound() {
               </div>
             </div>
           </div>
-          <div className="nf-box leading-[16vw] md:leading-[9vw] uppercase text-[20vw] md:text-[12vw]  text-[#090805]">
+          <div className="nf-box leading-[16vw] md:leading-[9vw] uppercase text-[20vw] md:text-[12vw]  text-black-deep">
             <div className="waypoint">
               <h2 className="">Not</h2>
             </div>
@@ -135,7 +135,7 @@ export default function NotFound() {
               <h2 className="">Found</h2>
             </div>
           </div>
-          <div className="nf-head__wrap opacity-40 bottom-[4.5vw] md:bottom-[1.75vw]   text-[#d32d08]">
+          <div className="nf-head__wrap opacity-40 bottom-[4.5vw] md:bottom-[1.75vw]   text-custom-red">
             <div className="waypoint">
               <h1 className="nf-head text-[40vw] md:text-[30vw]">404</h1>
             </div>
