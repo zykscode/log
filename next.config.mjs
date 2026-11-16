@@ -1,12 +1,15 @@
+import { withPayload } from '@payloadcms/next/withPayload';
+
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is va.vercel-scripts.com helped-drake-74.clerk.accounts.dev localhost:3000 blob:;
-  style-src 'self' 'unsafe-inline';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app va.vercel-scripts.com blob:;
+  style-src 'self' 'unsafe-inline' giscus.app;
   img-src * blob: data:;
-  media-src *.s3.amazonaws.com;
+  media-src 'self' https: blob:;
   connect-src *;
-  font-src 'self';
-  frame-src giscus.app
+  font-src 'self' data:;
+  frame-src 'self' giscus.app www.youtube-nocookie.com www.youtube.com player.vimeo.com open.spotify.com w.soundcloud.com codepen.io codesandbox.io www.figma.com embed.figma.com www.loom.com www.google.com maps.google.com bandcamp.com;
+  frame-ancestors 'self'
 `;
 
 const securityHeaders = [
@@ -20,7 +23,7 @@ const securityHeaders = [
   },
   {
     key: 'X-Frame-Options',
-    value: 'DENY',
+    value: 'SAMEORIGIN',
   },
   {
     key: 'X-Content-Type-Options',
@@ -64,14 +67,21 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    // One 404 page for every unmatched URL (the app has two root layouts:
+    // the public site and the Payload admin).
+    globalNotFound: true,
+  },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        // Public site only — the Payload admin (/admin) and API (/api) manage
+        // their own requirements (Monaco editor, workers, inline scripts).
+        source: '/((?!admin|api).*)',
         headers: securityHeaders,
       },
     ];
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig, { devBundleServerPackages: false });

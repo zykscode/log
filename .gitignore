@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# payload — local SQLite database and locally stored uploads (dev only)
+/data/*.db
+/data/*.db-*
+/media

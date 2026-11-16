@@ -1,111 +1,73 @@
 import { type ClassValue, clsx } from 'clsx';
-import localFont from 'next/font/local';
 import { twMerge } from 'tailwind-merge';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const WhyteInktrap = localFont({
-  src: [
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Black.woff2',
-      weight: '900',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Medium.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Heavy.woff2',
-      weight: '900',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-ExtraLight.woff2',
-      weight: '200',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Super.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Thin.woff2',
-      weight: '100',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Italic.woff2',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-ExtraLightItalic.woff2',
-      weight: '200',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Book.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-ThinItalic.woff2',
-      weight: '100',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-BlackItalic.woff2',
-      weight: '900',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-MediumItalic.woff2',
-      weight: '500',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-SuperItalic.woff2',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Light.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-BookItalic.woff2',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-LightItalic.woff2',
-      weight: '300',
-      style: 'italic',
-    },
-    {
-      path: '../public/fonts/whyte-inktrap/WhyteInktrap-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-whyteinktrap',
-});
+const TZ = process.env.NEXT_PUBLIC_TIMEZONE || 'Europe/London';
 
-export function formatDate(input: string | number): string {
+export function formatDate(
+  input: string | number | Date | null | undefined,
+  style: 'long' | 'short' | 'month' | 'day' | 'weekday' | 'iso' = 'long',
+): string {
+  if (!input) return '';
   const date = new Date(input);
-  return date.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  if (Number.isNaN(date.getTime())) return '';
+  if (style === 'iso') return date.toISOString();
+  const opts: Intl.DateTimeFormatOptions =
+    style === 'short'
+      ? { day: 'numeric', month: 'short', year: 'numeric' }
+      : style === 'month'
+        ? { month: 'long', year: 'numeric' }
+        : style === 'day'
+          ? { day: 'numeric', month: 'short' }
+          : style === 'weekday'
+            ? {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              }
+            : { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Intl.DateTimeFormat('en-GB', { ...opts, timeZone: TZ }).format(
+    date,
+  );
+}
+
+export function dateParts(input: string | Date) {
+  const d = new Date(input);
+  const get = (o: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat('en-GB', { ...o, timeZone: TZ }).format(d);
+  return {
+    day: get({ day: '2-digit' }),
+    month: get({ month: 'short' }),
+    monthLong: get({ month: 'long' }),
+    year: get({ year: 'numeric' }),
+    weekday: get({ weekday: 'long' }),
+  };
+}
+
+/** Roman numerals for the menu (I, II, III …). */
+export function toRoman(num: number): string {
+  const map: [number, string][] = [
+    [10, 'X'],
+    [9, 'IX'],
+    [5, 'V'],
+    [4, 'IV'],
+    [1, 'I'],
+  ];
+  let n = num;
+  let out = '';
+  for (const [v, s] of map) {
+    while (n >= v) {
+      out += s;
+      n -= v;
+    }
+  }
+  return out;
+}
+
+export function plural(n: number, word: string, pluralWord = `${word}s`) {
+  return `${n.toLocaleString('en-GB')} ${n === 1 ? word : pluralWord}`;
 }

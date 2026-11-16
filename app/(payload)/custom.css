@@ -1,0 +1,5 @@
+/* Light brand touches for the admin. */
+.btn--style-primary {
+  --bg-color: #d32d08;
+  --hover-bg: #b02606;
+}

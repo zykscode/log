@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Zykson — blog, journal, diary, archive & portfolio
 
-## Getting Started
+A personal site with its own CMS built in. Write at **`/admin`**, publish to the site.
 
-First, run the development server:
+- **Next.js 16** (App Router, Turbopack), **React 19**, **Tailwind CSS 4**, **Motion**
+- **Payload CMS 3** running inside the same app — drafts, autosave, version history,
+  scheduling, live preview, a rich editor with 15+ block types
+- **SQLite** locally, **Turso** (libSQL) in production — your content, in a database you own
+- Static pages that regenerate when you publish → fast and nearly free to host
+
+Writing guide (all editor features): **[docs/WRITING.md](docs/WRITING.md)** ·
+Architecture & decisions: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
+
+---
+
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env.local      # then set PAYLOAD_SECRET (any long random string)
+pnpm dev                         # http://localhost:3000  ·  admin: /admin
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The first visit to `/admin` asks you to create your account. Or load sample content
+(posts using every block, journal & diary entries, projects, pages):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm seed                        # only on an empty database
+SEED_RESET=1 pnpm seed           # wipe content and reseed (careful)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Sections
 
-## Learn More
+| URL | What | Managed in |
+| --- | --- | --- |
+| `/` | Home (built from sections) | Pages → slug `home` |
+| `/blog`, `/blog/[slug]` | Long-form posts, categories, series, related posts, comments | Blog posts |
+| `/journal`, `/diary` | Dated entries with mood, weather, place; calendar heatmap; “on this day” | Journal & diary |
+| `/work`, `/work/[slug]` | Portfolio & case studies | Portfolio |
+| `/archive` | Everything by year → month, filterable | automatic |
+| `/tags`, `/tags/[slug]`, `/series/[slug]` | Topics & series | Tags, Series |
+| `/search` + ⌘K anywhere | Full-text search | automatic |
+| `/about`, `/now`, `/uses`, `/contact`, … | Any page you create | Pages |
+| `/feed.xml`, `/blog/feed.xml`, `/journal/feed.xml` | RSS (full text) | automatic |
+| `/sitemap.xml`, `/robots.txt`, share images | SEO | automatic |
 
-To learn more about Next.js, take a look at the following resources:
+**Visibility** on every post/entry/project: *Public*, *Unlisted* (link only — hidden from
+lists, feeds, search, sitemap) or *Private* (only you). **Author mode** (admin sidebar →
+“View as author”) shows drafts, scheduled and private items on the real site, with edit links.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy for $0
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Database — Turso** (free): `turso db create zykson`, then copy the URL and a token into
+   `DATABASE_URL` / `DATABASE_AUTH_TOKEN`.
+2. **Media — Vercel Blob** (Vercel → Storage → Blob → connect) *or* **Cloudflare R2**
+   (10 GB free, no egress) via the `S3_*` variables.
+3. **Hosting — Vercel Hobby**: import the repo, set the variables from `.env.example`
+   (`PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, database, storage). Vercel runs the
+   `vercel-build` script, which applies database migrations and then builds.
+4. Open `https://your-domain/admin` and create your account.
 
-## Deploy on Vercel
+Optional: comments via [Giscus](https://giscus.app) (free, GitHub Discussions) — paste
+its IDs into *Site settings → Reading*.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Changing the content model
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Collections live in `payload/collections`, blocks in `payload/blocks`, editor features in
+`payload/editor`. After changing them:
+
+```bash
+pnpm generate:types              # refresh payload-types.ts
+pnpm generate:importmap          # if you added admin components
+pnpm migrate:create my-change    # creates a migration for production
+```
+
+Locally the SQLite schema updates itself; production applies `migrations/` on deploy.
+
+## Scripts
+
+| Command | |
+| --- | --- |
+| `pnpm dev` / `build` / `start` | Next.js |
+| `pnpm seed` | Sample content (+ local admin from `SEED_ADMIN_*`) |
+| `pnpm import:hygraph` | One-off import of posts from the old Hygraph CMS |
+| `pnpm generate:types` | Regenerate `payload-types.ts` |
+| `pnpm migrate`, `migrate:create` | Database migrations |
+| `pnpm lint`, `check-types`, `format` | Quality |
