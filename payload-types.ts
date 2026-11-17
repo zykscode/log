@@ -347,12 +347,17 @@ export interface Tag {
   createdAt: string;
 }
 /**
+ * Only one admin (you). Anyone you invite is an Editor: they can write and edit content but not change settings or accounts.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
   name: string;
+  /**
+   * New accounts are always created as Editors. Only the admin can change roles.
+   */
   role: 'admin' | 'editor';
   avatar?: (number | null) | Media;
   bio?: string | null;

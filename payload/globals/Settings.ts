@@ -1,14 +1,14 @@
 import type { GlobalConfig } from 'payload';
 
 import { SOCIAL_PLATFORMS } from '../../lib/constants';
-import { anyone, authenticated } from '../access';
+import { anyone, isAdmin } from '../access';
 import { revalidateGlobal } from '../hooks';
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Site settings',
   admin: { group: 'Settings' },
-  access: { read: anyone, update: authenticated },
+  access: { read: anyone, update: isAdmin }, // settings: admin only
   hooks: { afterChange: [revalidateGlobal] },
   fields: [
     {
