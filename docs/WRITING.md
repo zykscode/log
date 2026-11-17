@@ -65,6 +65,25 @@ or link a card to another post/project/entry.
 **Inline blocks** (sit inside a sentence): **footnote** (numbered automatically, listed at
 the end, preview on hover), **inline equation**, **keyboard keys** (`Cmd+Shift+P`).
 
+## Writing check (spelling, grammar, readability)
+
+Under every main editor there's a **✍️ Writing check** panel:
+
+- **Check spelling & grammar** checks the title, subtitle, excerpt and text together
+  (powered by LanguageTool). Each suggestion shows the sentence it's in; click a
+  suggestion to apply it, **Show** to jump to it in the editor, **Ignore**, or
+  **Add to dictionary** for names and words you use on purpose (your personal
+  dictionary is on your author profile and can be edited there).
+- **Picky** also flags style: wordiness, clichés, weak phrasing.
+- **Language**: English (UK, US, Canada, Australia, NZ, South Africa) or automatic.
+- **Readability** (instant, on your device): readability score, grade level, words,
+  reading time, average sentence length, plus lists of long sentences, passive voice,
+  adverbs, filler words and repeated words.
+- Your browser also underlines misspellings as you type (in the chosen language).
+
+Text you check is sent to LanguageTool's servers. To keep it fully private, run your
+own LanguageTool server and set `LANGUAGETOOL_URL`.
+
 ## Building pages
 
 A page has a **hero** (giant title, split with image, minimal or none — use `|` in the
@@ -83,6 +102,22 @@ tick *List in the big menu* to add it to the ☰ menu.
 *Settings → Site settings*: name, header wordmark, tagline, description, avatar, default
 share image, menu items (and which show in the header), social links, the “Currently…”
 status line, an announcement bar, footer note, posts per page, and comments (Giscus).
+
+## SEO & the installable app
+
+*Settings → Site settings → SEO & app*: site language, your X/Twitter handle (credited
+on share cards), Google/Bing/Yandex verification codes, an option to ask AI crawlers
+not to use the site, and the name shown when the site is installed as an app.
+
+Every post, entry, project and page also has an **SEO & sharing** tab (custom title,
+description, share image, or hide from search engines). Everything else is automatic:
+canonical URLs, Open Graph and Twitter cards, structured data (articles, breadcrumbs,
+site search, your profile), sitemap with images, RSS, robots.txt, and generated share
+images when a page has none.
+
+**Offline & install**: readers can install the site (phone home screen or desktop),
+read recently visited pages offline, and use **Save for offline** on any post, entry or
+project.
 
 ## Inbox
 

@@ -9,10 +9,12 @@ import { ShareLinks } from '@/components/content/Share';
 import { TableOfContents } from '@/components/content/TableOfContents';
 import { RichText } from '@/components/rich-text/RichText';
 import { EditLink } from '@/components/site/AuthorBar';
+import { SaveOffline } from '@/components/site/Pwa';
 import { ScrollProgress } from '@/components/site/ScrollProgress';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { SectionHeading } from '@/components/ui/PageHeader';
 import { StatusBadges, TagList } from '@/components/ui/Primitives';
+import { breadcrumbsLd, JsonLd, postLd } from '@/lib/jsonld';
 import { collectHeadings } from '@/lib/lexical';
 import { buildMetadata } from '@/lib/metadata';
 import {
@@ -53,6 +55,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     modifiedTime: post.updatedAt,
     noindex: post.visibility === 'unlisted',
     canonical: post.canonicalUrl,
+    authors: (post.authors ?? []).flatMap((a) =>
+      typeof a === 'object' && a ? [a.name] : [],
+    ),
+    section:
+      typeof post.category === 'object' ? post.category?.title : undefined,
+    tags: (post.tags ?? []).flatMap((t) =>
+      typeof t === 'object' && t ? [t.title] : [],
+    ),
   });
 }
 
@@ -103,25 +113,25 @@ export default async function PostPage({ params }: Props) {
     new Date(post.updatedAt).getTime() - new Date(post.publishedAt).getTime() >
       86_400_000;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: fallbackExcerpt(post),
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    url,
-    image: cover?.url ? absoluteUrl(cover.url) : undefined,
-    author: authors.map((a) => ({ '@type': 'Person', name: a.name })),
-    wordCount: post.wordCount ?? undefined,
-  };
-
   return (
     <article>
       <ScrollProgress />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          postLd(post, settings),
+          breadcrumbsLd([
+            { name: 'Blog', path: '/blog' },
+            ...(category
+              ? [
+                  {
+                    name: category.title,
+                    path: `/blog/category/${category.slug}`,
+                  },
+                ]
+              : []),
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+        ]}
       />
 
       <header className="mx-auto max-w-[90rem] px-5 pb-10 pt-10 md:px-10 md:pt-16">
@@ -237,7 +247,10 @@ export default async function PostPage({ params }: Props) {
 
           <footer className="mt-16 space-y-8">
             <TagList tags={post.tags} />
-            <ShareLinks url={url} title={post.title} />
+            <div className="flex flex-wrap items-center gap-3">
+              <ShareLinks url={url} title={post.title} />
+              <SaveOffline />
+            </div>
             {authors[0] && (
               <div className="flex items-center gap-4 rounded-2xl bg-fg/[0.04] p-5">
                 {typeof authors[0].avatar === 'object' && authors[0].avatar && (

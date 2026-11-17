@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 
 import { MenuProvider } from '@/components/site/MenuContext';
+import { PwaProvider } from '@/components/site/Pwa';
 import { Shell } from '@/components/site/Shell';
 import { ThemeProvider } from '@/components/site/ThemeProvider';
 import { toChrome } from '@/lib/chrome';
@@ -32,7 +33,11 @@ export default async function FrontendLayout({
   const chrome = toChrome(settings);
 
   return (
-    <html lang="en" className={WhyteInktrap.variable} suppressHydrationWarning>
+    <html
+      lang={settings.language || 'en-GB'}
+      className={WhyteInktrap.variable}
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh">
         <ThemeProvider
           attribute="class"
@@ -41,15 +46,17 @@ export default async function FrontendLayout({
           disableTransitionOnChange
         >
           <MenuProvider>
-            <Shell
-              chrome={chrome}
-              menuPages={menuPages.map((p) => ({
-                label: p.title,
-                url: `/${p.slug}`,
-              }))}
-            >
-              {children}
-            </Shell>
+            <PwaProvider>
+              <Shell
+                chrome={chrome}
+                menuPages={menuPages.map((p) => ({
+                  label: p.title,
+                  url: `/${p.slug}`,
+                }))}
+              >
+                {children}
+              </Shell>
+            </PwaProvider>
           </MenuProvider>
         </ThemeProvider>
         {/* Vercel Analytics only works when hosted on Vercel */}

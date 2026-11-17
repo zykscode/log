@@ -787,17 +787,19 @@ export const getStats = cache(async (viewer: Viewer) => {
 /* Static params & redirects                                           */
 /* ------------------------------------------------------------------ */
 
+export type PublicSlug = {
+  slug: string;
+  type?: string | null;
+  updatedAt?: string;
+  publishedAt?: string | null;
+  /** cover image URL (for image sitemaps) */
+  image?: string | null;
+};
+
 export async function getPublicSlugs(
   collection: 'posts' | 'journal' | 'projects' | 'pages',
   extra?: Where,
-): Promise<
-  {
-    slug: string;
-    type?: string | null;
-    updatedAt?: string;
-    publishedAt?: string | null;
-  }[]
-> {
+): Promise<PublicSlug[]> {
   const payload = await getPayloadClient();
   const where =
     collection === 'pages'
@@ -809,30 +811,36 @@ export async function getPublicSlugs(
       : and(visible({ isAuthor: false, user: null }, 'listed'), extra);
   const res = await payload.find({
     collection,
-    depth: 0,
+    depth: collection === 'pages' ? 0 : 1,
     pagination: false,
     select: {
       slug: true,
       updatedAt: true,
-      ...(collection === 'pages' ? {} : { publishedAt: true }),
+      ...(collection === 'pages'
+        ? {}
+        : { publishedAt: true, coverImage: true }),
       ...(collection === 'journal' ? { type: true } : {}),
     } as never,
     where,
   });
-  return (
-    res.docs as {
-      slug?: string | null;
-      type?: string | null;
-      updatedAt?: string;
-      publishedAt?: string | null;
-    }[]
-  )
-    .filter((d): d is { slug: string } & typeof d => Boolean(d.slug))
+  type Row = {
+    slug?: string | null;
+    type?: string | null;
+    updatedAt?: string;
+    publishedAt?: string | null;
+    coverImage?: { url?: string | null } | number | null;
+  };
+  return (res.docs as Row[])
+    .filter((d) => Boolean(d.slug))
     .map((d) => ({
       slug: d.slug as string,
       type: d.type,
       updatedAt: d.updatedAt,
       publishedAt: d.publishedAt,
+      image:
+        d.coverImage && typeof d.coverImage === 'object'
+          ? d.coverImage.url
+          : null,
     }));
 }
 

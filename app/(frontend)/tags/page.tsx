@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container, EmptyState } from '@/components/ui/Primitives';
 import { buildMetadata } from '@/lib/metadata';
@@ -22,6 +23,14 @@ export default async function TagsPage() {
 
   return (
     <>
+      <ListingSeo
+        name="Topics"
+        path="/tags"
+        items={tags.map((t) => ({
+          name: `#${t.title}`,
+          path: `/tags/${t.slug}`,
+        }))}
+      />
       <PageHeader
         title="Topics"
         kicker={plural(tags.length, 'topic')}

@@ -18,6 +18,7 @@ import { Projects } from './payload/collections/Projects';
 import { Categories, Series, Tags } from './payload/collections/Taxonomies';
 import { Users } from './payload/collections/Users';
 import { richEditor } from './payload/editor/full';
+import { writingCheckEndpoint } from './payload/endpoints/writingCheck';
 import { Settings } from './payload/globals/Settings';
 import { revalidateAfterChange, revalidateAfterDelete } from './payload/hooks';
 
@@ -120,6 +121,7 @@ export default buildConfig({
     Users,
   ],
   globals: [Settings],
+  endpoints: [writingCheckEndpoint],
   db: sqliteAdapter({
     client: {
       url: databaseUrl || `file:${path.resolve(dirname, 'data/zykson.db')}`,

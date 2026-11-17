@@ -1,5 +1,6 @@
 import { ProjectCard } from '@/components/content/ProjectCard';
 import { WorkFilter } from '@/components/content/WorkFilter';
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container, EmptyState } from '@/components/ui/Primitives';
 import { DISCIPLINES } from '@/lib/constants';
@@ -32,6 +33,15 @@ export default async function WorkPage() {
 
   return (
     <>
+      <ListingSeo
+        name="Work"
+        path="/work"
+        description="Selected projects and case studies."
+        items={projects.map((p) => ({
+          name: p.title,
+          path: `/work/${p.slug}`,
+        }))}
+      />
       <PageHeader
         title="Work"
         kicker={plural(projects.length, 'project')}

@@ -1,9 +1,27 @@
 import type { MetadataRoute } from 'next';
 
-import { getAllCategories, getPublicSlugs, getTagCloud } from '@/lib/queries';
+import {
+  getAllCategories,
+  getPublicSlugs,
+  getTagCloud,
+  type PublicSlug,
+} from '@/lib/queries';
 import { absoluteUrl, docPath } from '@/lib/urls';
 
 export const revalidate = 3600;
+
+const entry = (
+  path: string,
+  doc: PublicSlug | null,
+  priority: number,
+  changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] = 'monthly',
+): MetadataRoute.Sitemap[number] => ({
+  url: absoluteUrl(path),
+  lastModified: doc?.updatedAt ? new Date(doc.updatedAt) : undefined,
+  changeFrequency,
+  priority,
+  ...(doc?.image ? { images: [absoluteUrl(doc.image)] } : {}),
+});
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, entries, projects, pages, categories, tags] = await Promise.all(
@@ -16,49 +34,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getTagCloud({ isAuthor: false, user: null }),
     ],
   );
-  const fixed = [
-    '/',
-    '/blog',
-    '/journal',
-    '/diary',
-    '/work',
-    '/archive',
-    '/tags',
-  ].map((p) => ({
-    url: absoluteUrl(p),
-    changeFrequency: 'weekly' as const,
-    priority: p === '/' ? 1 : 0.8,
-  }));
+  const newest = (list: PublicSlug[]) =>
+    list.reduce<PublicSlug | null>(
+      (a, b) => (!a || (b.updatedAt ?? '') > (a.updatedAt ?? '') ? b : a),
+      null,
+    );
+
   return [
-    ...fixed,
+    entry('/', newest([...posts, ...entries, ...projects]), 1, 'daily'),
+    entry('/blog', newest(posts), 0.9, 'daily'),
+    entry(
+      '/journal',
+      newest(entries.filter((e) => e.type !== 'diary')),
+      0.8,
+      'daily',
+    ),
+    entry(
+      '/diary',
+      newest(entries.filter((e) => e.type === 'diary')),
+      0.6,
+      'weekly',
+    ),
+    entry('/work', newest(projects), 0.8, 'monthly'),
+    entry(
+      '/archive',
+      newest([...posts, ...entries, ...projects]),
+      0.5,
+      'weekly',
+    ),
+    entry('/tags', null, 0.4, 'weekly'),
     ...pages
       .filter((p) => p.slug !== 'home')
-      .map((p) => ({
-        url: absoluteUrl(`/${p.slug}`),
-        lastModified: p.updatedAt,
-      })),
-    ...posts.map((p) => ({
-      url: absoluteUrl(docPath('posts', p)),
-      lastModified: p.updatedAt,
-      priority: 0.7,
-    })),
-    ...entries.map((e) => ({
-      url: absoluteUrl(docPath('journal', e)),
-      lastModified: e.updatedAt,
-      priority: 0.5,
-    })),
-    ...projects.map((p) => ({
-      url: absoluteUrl(docPath('projects', p)),
-      lastModified: p.updatedAt,
-      priority: 0.7,
-    })),
-    ...categories.map((c) => ({
-      url: absoluteUrl(docPath('categories', c)),
-      priority: 0.4,
-    })),
-    ...tags.map((t) => ({
-      url: absoluteUrl(docPath('tags', t)),
-      priority: 0.3,
-    })),
+      .map((p) => entry(`/${p.slug}`, p, 0.7)),
+    ...posts.map((p) => entry(docPath('posts', p), p, 0.8)),
+    ...projects.map((p) => entry(docPath('projects', p), p, 0.7)),
+    ...entries.map((e) => entry(docPath('journal', e), e, 0.5, 'yearly')),
+    ...categories.map((c) =>
+      entry(docPath('categories', c), null, 0.4, 'weekly'),
+    ),
+    ...tags.map((t) => entry(docPath('tags', t), null, 0.3, 'weekly')),
   ];
 }

@@ -2,6 +2,7 @@ import {
   type ArchiveRow,
   ArchiveTimeline,
 } from '@/components/content/ArchiveTimeline';
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container } from '@/components/ui/Primitives';
 import { buildMetadata } from '@/lib/metadata';
@@ -44,6 +45,12 @@ export default async function ArchivePage() {
 
   return (
     <>
+      <ListingSeo
+        name="Archive"
+        path="/archive"
+        description="Everything, in order — posts, journal, diary and work."
+        items={rows.slice(0, 50).map((r) => ({ name: r.title, path: r.href }))}
+      />
       <PageHeader
         title="Archive"
         kicker={`${plural(rows.length, 'thing')}${since ? ` since ${since}` : ''}`}

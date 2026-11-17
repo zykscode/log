@@ -5,9 +5,11 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { PrevNext } from '@/components/content/Navigation';
 import { RichText } from '@/components/rich-text/RichText';
 import { EditLink } from '@/components/site/AuthorBar';
+import { SaveOffline } from '@/components/site/Pwa';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { StatusBadges, TagList } from '@/components/ui/Primitives';
 import { moodOf, weatherOf } from '@/lib/constants';
+import { breadcrumbsLd, entryLd, JsonLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/metadata';
 import {
   type EntryType,
@@ -15,6 +17,7 @@ import {
   getEntry,
   getEntryNeighbours,
   getRedirectFor,
+  getSettings,
 } from '@/lib/queries';
 import { dateParts } from '@/lib/utils';
 import { getViewer } from '@/lib/viewer';
@@ -36,6 +39,10 @@ export async function entryMetadata(
     type: 'article',
     publishedTime: entry.publishedAt,
     noindex: entry.visibility !== 'public',
+    section: type === 'diary' ? 'Diary' : 'Journal',
+    tags: (entry.tags ?? []).flatMap((t) =>
+      typeof t === 'object' && t ? [t.title] : [],
+    ),
   });
 }
 
@@ -71,8 +78,19 @@ export async function EntryView({
     entry.watching && { icon: '🎬', label: 'Watching', value: entry.watching },
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
+  const settings = await getSettings();
+  const section = type === 'diary' ? 'Diary' : 'Journal';
   return (
     <article className="pb-24">
+      <JsonLd
+        data={[
+          entryLd(entry, settings),
+          breadcrumbsLd([
+            { name: section, path: `/${type}` },
+            { name: entry.title ?? section, path: `/${type}/${entry.slug}` },
+          ]),
+        ]}
+      />
       <header className="px-5 pb-10 pt-10 md:px-10 md:pt-14">
         <div className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-muted">
           <Link href={`/${type}`} className="hover:text-fg">
@@ -164,6 +182,7 @@ export async function EntryView({
 
         <div className="mt-12 space-y-10">
           <TagList tags={entry.tags} />
+          <SaveOffline />
           <PrevNext
             previous={previous}
             next={next}

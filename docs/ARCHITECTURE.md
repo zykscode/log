@@ -50,6 +50,25 @@ components/          site chrome, cards, rich-text renderer, page-builder sectio
 - **Feeds/SEO**: RSS with full HTML content, sitemap, robots, canonical URLs, JSON-LD,
   generated Open Graph images (`/next/og`) when a page has no image.
 
+- **Writing check**: a Lexical editor feature (`payload/editor/writing-check`) renders a
+  panel under the editor; it posts plain text to `/api/writing-check`
+  (`payload/endpoints/writingCheck.ts`, logged-in authors only), which proxies to
+  LanguageTool in ≤18 KB chunks and filters words from the author's personal dictionary.
+  Fixes are applied straight into the Lexical text nodes. Readability is computed in the
+  browser (`analyze.ts`).
+- **PWA / offline**: `app/manifest.ts` (from Site settings, with shortcuts and maskable
+  icons) and a hand-written service worker (`public/sw.js`): network-first pages with a
+  4 s fallback to the saved/recent copy, cache-first hashed assets, stale-while-revalidate
+  images, and `/offline` as the last resort. Admin, API, author mode and any
+  `private`/`no-store` response are never cached. `components/site/Pwa.tsx` registers it
+  (production only) and provides the offline toast, install button and Save for offline.
+- **SEO**: `lib/metadata.ts` (canonical, robots directives, Open Graph incl. article
+  tags, Twitter cards, verification, Apple/PWA meta) and `lib/jsonld.tsx` (escaped
+  JSON-LD: WebSite + SearchAction, Person, BlogPosting, CreativeWork, About/Contact page,
+  CollectionPage + ItemList, BreadcrumbList). Lists add `rel=prev/next`. `app/robots.ts`
+  can opt out of AI crawlers; the sitemap includes images; publishing pings IndexNow when
+  `INDEXNOW_KEY` is set.
+
 ## Cost
 
 | Piece | Service | Free tier |

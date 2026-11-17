@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { EntryRow } from '@/components/content/EntryCards';
 import { Heatmap } from '@/components/content/Heatmap';
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container, EmptyState, Pagination } from '@/components/ui/Primitives';
 import { moodOf } from '@/lib/constants';
@@ -75,6 +76,18 @@ export async function EntryIndex({
 
   return (
     <>
+      <ListingSeo
+        name={copy.title}
+        path={page > 1 ? `${base}/page/${page}` : base}
+        description={copy.description}
+        items={entries.docs.map((e) => ({
+          name: e.title ?? copy.title,
+          path: docPath('journal', e),
+        }))}
+        page={page}
+        totalPages={entries.totalPages}
+        base={base}
+      />
       <PageHeader
         title={copy.title}
         kicker={plural(entries.totalDocs, 'entry', 'entries')}

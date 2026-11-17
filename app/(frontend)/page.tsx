@@ -8,6 +8,7 @@ import { ProjectCard } from '@/components/content/ProjectCard';
 import { EditLink } from '@/components/site/AuthorBar';
 import { PageHeader, SectionHeading } from '@/components/ui/PageHeader';
 import { ButtonLink, Container } from '@/components/ui/Primitives';
+import { JsonLd, siteGraph } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/metadata';
 import {
   getEntries,
@@ -101,10 +102,21 @@ async function DefaultHome() {
 
 export default async function HomePage() {
   const viewer = await getViewer();
-  const page = await getPage('home', viewer);
-  if (!page) return <DefaultHome />;
+  const [page, settings] = await Promise.all([
+    getPage('home', viewer),
+    getSettings(),
+  ]);
+  const ld = <JsonLd data={siteGraph(settings)} />;
+  if (!page)
+    return (
+      <>
+        {ld}
+        <DefaultHome />
+      </>
+    );
   return (
     <>
+      {ld}
       <PageHero
         page={page}
         aside={<EditLink collection="pages" id={page.id} />}

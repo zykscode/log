@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container, EmptyState } from '@/components/ui/Primitives';
 import { buildMetadata } from '@/lib/metadata';
@@ -30,6 +31,16 @@ export default async function SeriesPage({ params }: Props) {
 
   return (
     <>
+      <ListingSeo
+        name={series.title}
+        path={`/series/${series.slug}`}
+        description={series.description}
+        items={posts.map((p) => ({ name: p.title, path: `/blog/${p.slug}` }))}
+        crumbs={[
+          { name: 'Topics', path: '/tags' },
+          { name: series.title, path: `/series/${series.slug}` },
+        ]}
+      />
       <PageHeader
         title={series.title}
         size="lg"

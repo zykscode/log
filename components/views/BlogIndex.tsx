@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { FeaturedPost, PostList } from '@/components/content/PostCards';
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Container, EmptyState, Pagination } from '@/components/ui/Primitives';
 import { getAllCategories, getPosts, getSettings } from '@/lib/queries';
@@ -38,6 +39,22 @@ export async function BlogIndex({
 
   return (
     <>
+      <ListingSeo
+        name={category ? category.title : 'Blog'}
+        path={page > 1 ? `${base}/page/${page}` : base}
+        description={category?.description}
+        items={[...(hero ? [hero] : []), ...posts.docs].map((p) => ({
+          name: p.title,
+          path: `/blog/${p.slug}`,
+        }))}
+        crumbs={[
+          { name: 'Blog', path: '/blog' },
+          ...(category ? [{ name: category.title, path: base }] : []),
+        ]}
+        page={page}
+        totalPages={posts.totalPages}
+        base={base}
+      />
       <PageHeader
         title={category ? category.title : 'Blog'}
         kicker={

@@ -28,6 +28,7 @@ import {
   PullQuote,
   Verse,
 } from '../blocks/rich';
+import { WritingCheckFeature } from './writing-check/server';
 
 /** Languages offered in code blocks (Monaco ids → labels). */
 export const CODE_LANGUAGES: Record<string, string> = {
@@ -128,6 +129,7 @@ export const richEditor = lexicalEditor({
     TextStateFeature({ state: TEXT_STATES }),
     FixedToolbarFeature(),
     InlineToolbarFeature(),
+    WritingCheckFeature(),
     BlocksFeature({
       blocks: [
         CodeBlock({

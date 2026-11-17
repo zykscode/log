@@ -7,10 +7,12 @@ import { ProjectCard } from '@/components/content/ProjectCard';
 import { Gallery } from '@/components/rich-text/blocks';
 import { RichText } from '@/components/rich-text/RichText';
 import { EditLink } from '@/components/site/AuthorBar';
+import { SaveOffline } from '@/components/site/Pwa';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { SectionHeading } from '@/components/ui/PageHeader';
 import { ButtonLink, StatusBadges, TagList } from '@/components/ui/Primitives';
 import { DISCIPLINES, labelOf, PROJECT_STATUS } from '@/lib/constants';
+import { breadcrumbsLd, JsonLd, projectLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/metadata';
 import {
   fallbackExcerpt,
@@ -18,6 +20,7 @@ import {
   getProjects,
   getPublicSlugs,
   getRedirectFor,
+  getSettings,
 } from '@/lib/queries';
 import { getViewer } from '@/lib/viewer';
 import type { Media, Post } from '@/payload-types';
@@ -41,6 +44,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     image: project.coverImage as Media,
     kind: 'Work',
     noindex: project.visibility === 'unlisted',
+    tags: [
+      ...(project.stack ?? []),
+      ...(project.tags ?? []).flatMap((t) =>
+        typeof t === 'object' && t ? [t.title] : [],
+      ),
+    ],
   });
 }
 
@@ -77,8 +86,18 @@ export default async function ProjectPage({ params }: Props) {
     project.stack?.length && ['Tools', project.stack.join(', ')],
   ].filter(Boolean) as [string, string][];
 
+  const settings = await getSettings();
   return (
     <article className="pb-24">
+      <JsonLd
+        data={[
+          projectLd(project, settings),
+          breadcrumbsLd([
+            { name: 'Work', path: '/work' },
+            { name: project.title, path: `/work/${project.slug}` },
+          ]),
+        ]}
+      />
       <header className="px-5 pb-12 pt-10 md:px-10 md:pt-14">
         <div className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-muted">
           <Link href="/work" className="hover:text-fg">
@@ -189,6 +208,7 @@ export default async function ProjectPage({ params }: Props) {
 
       <div className="mx-auto mt-12 max-w-[46rem] space-y-10 px-5 md:px-0">
         <TagList tags={project.tags} />
+        <SaveOffline />
         {related.length > 0 && (
           <section>
             <h2 className="eyebrow mb-2 text-faint">Related writing</h2>

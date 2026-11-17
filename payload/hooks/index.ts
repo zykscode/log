@@ -14,6 +14,7 @@ import {
   lexicalToPlainText,
   readingTimeMinutes,
 } from '../../lib/lexical';
+import { pingIndexNow } from './indexnow';
 
 /**
  * The public site is statically generated. Whenever published content changes
@@ -52,6 +53,8 @@ export const revalidateAfterChange: CollectionAfterChangeHook = ({
       req.payload,
       `${collection.slug} ${publishedNow ? 'published' : 'unpublished'}`,
     );
+    if (publishedNow && doc?.visibility === 'public')
+      pingIndexNow(req.payload, collection.slug, doc);
   }
   return doc;
 };

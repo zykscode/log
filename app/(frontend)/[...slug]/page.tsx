@@ -5,8 +5,14 @@ import { PageHero } from '@/components/blocks/PageHero';
 import { RenderBlocks } from '@/components/blocks/RenderBlocks';
 import { EditLink } from '@/components/site/AuthorBar';
 import { StatusBadges } from '@/components/ui/Primitives';
+import { breadcrumbsLd, JsonLd, pageLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/metadata';
-import { getPage, getPublicSlugs, getRedirectFor } from '@/lib/queries';
+import {
+  getPage,
+  getPublicSlugs,
+  getRedirectFor,
+  getSettings,
+} from '@/lib/queries';
 import { getViewer } from '@/lib/viewer';
 
 export const revalidate = 3600;
@@ -49,8 +55,15 @@ export default async function CmsPage({ params }: Props) {
     notFound();
   }
 
+  const settings = await getSettings();
   return (
     <article>
+      <JsonLd
+        data={[
+          pageLd(page, settings),
+          breadcrumbsLd([{ name: page.title, path: `/${page.slug}` }]),
+        ]}
+      />
       <PageHero
         page={page}
         aside={

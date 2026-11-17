@@ -362,6 +362,10 @@ export interface User {
   avatar?: (number | null) | Media;
   bio?: string | null;
   website?: string | null;
+  /**
+   * Words the spell checker should accept (names, places, slang). “Add to dictionary” in the writing check adds them here.
+   */
+  dictionary?: string[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1543,6 +1547,7 @@ export interface UsersSelect<T extends boolean = true> {
   avatar?: T;
   bio?: T;
   website?: T;
+  dictionary?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1687,6 +1692,30 @@ export interface Setting {
     url?: string | null;
   };
   footerNote?: string | null;
+  /**
+   * Language of the site (for search engines, screen readers and sharing).
+   */
+  language?: ('en-GB' | 'en-US' | 'en-NG' | 'en') | null;
+  /**
+   * Credited on share cards.
+   */
+  xHandle?: string | null;
+  /**
+   * Paste only the code from the verification meta tag (content="…").
+   */
+  verification?: {
+    google?: string | null;
+    bing?: string | null;
+    yandex?: string | null;
+  };
+  /**
+   * Adds GPTBot, ChatGPT, Google-Extended, ClaudeBot, CCBot, PerplexityBot, Applebot-Extended, Bytespider and Meta’s crawler to robots.txt as disallowed. Normal search engines are unaffected.
+   */
+  blockAICrawlers?: boolean | null;
+  /**
+   * Shown under the icon when the site is installed on a phone or desktop.
+   */
+  appShortName?: string | null;
   postsPerPage?: number | null;
   entriesPerPage?: number | null;
   /**
@@ -1745,6 +1774,17 @@ export interface SettingsSelect<T extends boolean = true> {
         url?: T;
       };
   footerNote?: T;
+  language?: T;
+  xHandle?: T;
+  verification?:
+    | T
+    | {
+        google?: T;
+        bing?: T;
+        yandex?: T;
+      };
+  blockAICrawlers?: T;
+  appShortName?: T;
   postsPerPage?: T;
   entriesPerPage?: T;
   comments?:

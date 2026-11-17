@@ -149,5 +149,15 @@ export const Users: CollectionConfig = {
     { name: 'avatar', type: 'upload', relationTo: 'media' },
     { name: 'bio', type: 'textarea' },
     { name: 'website', type: 'text' },
+    {
+      name: 'dictionary',
+      type: 'text',
+      hasMany: true,
+      label: 'Personal dictionary',
+      admin: {
+        description:
+          'Words the spell checker should accept (names, places, slang). “Add to dictionary” in the writing check adds them here.',
+      },
+    },
   ],
 };

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { toRoman } from '@/lib/utils';
 
 import { useMenu } from './MenuContext';
+import { InstallApp } from './Pwa';
 import { Socials } from './Socials';
 import { ThemeToggle } from './ThemeToggle';
 import type { Chrome } from './types';
@@ -141,6 +142,7 @@ export function MenuOverlay({
               >
                 RSS feed <span aria-hidden>↗</span>
               </a>
+              <InstallApp className="flex w-full justify-between rounded-xl px-4 py-2 text-left text-bone/70 hover:text-white" />
             </div>
           </div>
           <div className="flex items-center justify-between gap-4">

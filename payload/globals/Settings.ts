@@ -223,6 +223,95 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'SEO & app',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'language',
+                  type: 'select',
+                  defaultValue: 'en-GB',
+                  options: [
+                    { label: 'English (UK)', value: 'en-GB' },
+                    { label: 'English (US)', value: 'en-US' },
+                    { label: 'English (Nigeria)', value: 'en-NG' },
+                    { label: 'English', value: 'en' },
+                  ],
+                  admin: {
+                    width: '50%',
+                    description:
+                      'Language of the site (for search engines, screen readers and sharing).',
+                  },
+                },
+                {
+                  name: 'xHandle',
+                  type: 'text',
+                  label: 'X / Twitter handle',
+                  admin: {
+                    width: '50%',
+                    placeholder: '@zykson',
+                    description: 'Credited on share cards.',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'verification',
+              type: 'group',
+              label: 'Search engine verification',
+              admin: {
+                description:
+                  'Paste only the code from the verification meta tag (content="…").',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'google',
+                      type: 'text',
+                      label: 'Google Search Console',
+                      admin: { width: '34%' },
+                    },
+                    {
+                      name: 'bing',
+                      type: 'text',
+                      label: 'Bing Webmaster',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'yandex',
+                      type: 'text',
+                      label: 'Yandex',
+                      admin: { width: '33%' },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'blockAICrawlers',
+              type: 'checkbox',
+              label: 'Ask AI crawlers not to use this site',
+              admin: {
+                description:
+                  'Adds GPTBot, ChatGPT, Google-Extended, ClaudeBot, CCBot, PerplexityBot, Applebot-Extended, Bytespider and Meta’s crawler to robots.txt as disallowed. Normal search engines are unaffected.',
+              },
+            },
+            {
+              name: 'appShortName',
+              type: 'text',
+              label: 'Installed app name',
+              defaultValue: 'Zykson',
+              admin: {
+                description:
+                  'Shown under the icon when the site is installed on a phone or desktop.',
+              },
+            },
+          ],
+        },
+        {
           label: 'Reading',
           fields: [
             {

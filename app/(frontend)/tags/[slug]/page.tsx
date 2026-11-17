@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { EntryRow } from '@/components/content/EntryCards';
 import { PostList } from '@/components/content/PostCards';
 import { ProjectGrid } from '@/components/content/ProjectCard';
+import { ListingSeo } from '@/components/ui/ListingSeo';
 import { PageHeader, SectionHeading } from '@/components/ui/PageHeader';
 import { Container, EmptyState } from '@/components/ui/Primitives';
 import { buildMetadata } from '@/lib/metadata';
@@ -42,6 +43,23 @@ export default async function TagPage({ params }: Props) {
 
   return (
     <>
+      <ListingSeo
+        name={`#${tag.title}`}
+        path={`/tags/${tag.slug}`}
+        description={tag.description}
+        items={[
+          ...posts.map((p) => ({ name: p.title, path: `/blog/${p.slug}` })),
+          ...entries.map((e) => ({
+            name: e.title ?? '',
+            path: `/${e.type === 'diary' ? 'diary' : 'journal'}/${e.slug}`,
+          })),
+          ...projects.map((p) => ({ name: p.title, path: `/work/${p.slug}` })),
+        ]}
+        crumbs={[
+          { name: 'Topics', path: '/tags' },
+          { name: `#${tag.title}`, path: `/tags/${tag.slug}` },
+        ]}
+      />
       <PageHeader
         title={`#${tag.title}`}
         size="lg"
